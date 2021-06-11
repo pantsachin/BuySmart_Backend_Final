@@ -1,0 +1,23 @@
+{
+  "name": "buysmart_backend_final",
+  "version": "1.0.0",
+  "description": "Backend of the E-Commerce App BuySmart. Made on Express Server hosted on Heroku.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pantsachin/BuySmart_Backend_Final.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pantsachin/BuySmart_Backend_Final/issues"
+  },
+  "homepage": "https://github.com/pantsachin/BuySmart_Backend_Final#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
