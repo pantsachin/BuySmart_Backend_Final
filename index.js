@@ -12,10 +12,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const newUserSignUp = require("./routes/user.router.js");
+const cartOperations = require("./routes/cart.router.js");
 
 initializeDBConnection();
 
 app.use("/user", newUserSignUp);
+app.use("/cart", cartOperations);
 
 app.get("/post", (req, res) => {
   res.send({ soorma: "soorma" });
