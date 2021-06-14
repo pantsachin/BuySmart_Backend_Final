@@ -1,6 +1,6 @@
 const { User } = require("../models/user.model.js");
 const { Cart } = require("../models/cart.model.js");
-const { wishList } = require("../models/wishList.js");
+const { WishList } = require("../models/wishlist.model.js");
 
 const createNewUserOnSignUp = async (req, res) => {
   console.log(req.body);
@@ -8,7 +8,16 @@ const createNewUserOnSignUp = async (req, res) => {
   try {
     const NewUser = new User(req.body);
     const savedUser = await NewUser.save();
-    res.status(200).json({ success: true, savedUser });
+
+    const NewCart = new Cart({ userId: savedUser._id });
+    const savedNewCart = await NewCart.save();
+
+    const NewWishList = new WishList({ userId: savedUser._id });
+    const savedWishList = await NewWishList.save();
+
+    res
+      .status(200)
+      .json({ success: true, savedUser, savedNewCart, savedWishList });
   } catch (error) {
     console.log("error occured in saving the new user details", error);
     res

@@ -11,11 +11,11 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const newUserSignUp = require("./routes/user.router.js");
+
 initializeDBConnection();
 
-app.get("/", (req, res) => {
-  res.send("We are on home!");
-});
+app.use("/user", newUserSignUp);
 
 app.get("/post", (req, res) => {
   res.send({ soorma: "soorma" });
