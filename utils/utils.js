@@ -14,4 +14,4 @@ function populateProductsCollection() {
   }
 }
 
-module.exports = populateProductsCollection;
+module.exports = { populateProductsCollection };
