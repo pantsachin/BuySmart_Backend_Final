@@ -26,4 +26,6 @@ app.get("/post", (req, res) => {
 app.use(errorHandler);
 app.use(routeNotFound);
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Server Started :white_check_mark:");
+});
