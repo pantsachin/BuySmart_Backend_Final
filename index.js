@@ -5,25 +5,18 @@ const bodyParser = require("body-parser");
 const { errorHandler } = require("./middlewares/errorHandler.js");
 const { routeNotFound } = require("./middlewares/routeNotFound.js");
 const { initializeDBConnection } = require("./database/database.connect.js");
-// const { populateProductsCollection } = require("./utils/utils.js");
+const { populateProductsCollection } = require("./utils/utils.js");
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const newUserSignUp = require("./routes/user.router.js");
-const cartOperations = require("./routes/cart.router.js");
-
 initializeDBConnection();
 
-app.use("/user", newUserSignUp);
-app.use("/cart", cartOperations);
+// app.use("/user", newUserSignUp);
+// app.use("/cart", cartOperations);
 
-app.get("/post", (req, res) => {
-  res.send({ soorma: "soorma" });
-});
-
-// populateProductsCollection();
+populateProductsCollection();
 
 app.use(errorHandler);
 app.use(routeNotFound);
