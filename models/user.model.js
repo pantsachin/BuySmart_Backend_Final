@@ -3,10 +3,18 @@ const { Product } = require("./product.model.js");
 const { Schema } = mongoose;
 
 const UserSchema = new mongoose.Schema({
-  userName: { type: String },
-  password: { type: String },
+  userName: { type: String, required: true },
+  password: { type: String, required: true },
+  email: { type: String },
+
   wishList: [{ type: Schema.Types.ObjectId, ref: "Product" }],
-  cart: [{ type: Schema.Types.ObjectId, ref: "Cart" }],
+
+  cart: [
+    {
+      product: { type: Schema.Types.ObjectId, ref: "Product" },
+      individualQuantity: { type: Number },
+    },
+  ],
 });
 
 const User = mongoose.model("User", UserSchema);

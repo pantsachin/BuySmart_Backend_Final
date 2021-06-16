@@ -1,13 +1,13 @@
 const express = require("express");
-
 const router = express.Router();
 
-const {
-  createNewUserOnSignUp,
-  getUserDataOnLogin,
-} = require("../controllers/userData.controller.js");
+const { addToWishList } = require("../controllers/wishlist.controller.js");
+const { createUser } = require("../controllers/userSignUp.controller.js");
 
-router.route("/signUp").post(createNewUserOnSignUp);
-router.route("/login").post(getUserDataOnLogin);
+// console.log({ addToWishList });
+// console.log({ createUser });
+
+router.route("/addItem").post(addToWishList);
+router.route("/signUp").post(createUser);
 
 module.exports = router;
