@@ -61,24 +61,24 @@ const removeFromWishList = async (req, res) => {
     const productToBeRemoved = await Product.findById({ _id: mongoObjectId });
 
     // The save() function is generally the right way to update a document with Mongoose
-    // const updatedUser = await User.findByIdAndUpdate(
-    //   mongoObjectId,
-    //   {
-    //     $pull: { wishList: mongoObjectId },
-    //   },
-    //   { new: true }
-    // )
-    //   .select("wishList")
-    //   .populate("wishList", "-__v");
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      {
+        $pull: { wishList: mongoObjectId },
+      },
+      { new: true }
+    )
+      .select("wishList")
+      .populate("wishList", "-__v");
 
-    console.log({ productToBeRemoved });
-    user.wishList.remove(mongoObjectId);
-    const saveUser = await user.save();
+    // console.log({ productToBeRemoved });
+    // user.wishList.remove(mongoObjectId);
+    // const saveUser = await user.save();
 
     res.status(200).json({
       success: true,
       message: "Item removed from the wishList successfully",
-      saveUser,
+      updatedUser,
     });
   } catch (error) {
     console.log(error);
