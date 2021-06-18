@@ -89,18 +89,4 @@ const removeFromWishList = async (req, res) => {
   }
 };
 
-// const removeFromWishList = async (req, res) => {
-//   const { userName, produictId } = req.body;
-//   console.log("productId", productId);
-
-//   try {
-//        const user = await User.findOne({ userName: userName });
-//     const productToBeAdded = await Product.findById({
-//       _id: ObjectId.parse(productId),
-//     });
-
-//   }
-
-// }
-
 module.exports = { addToWishList, removeFromWishList };

@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
   cart: [
     {
       product: { type: Schema.Types.ObjectId, ref: "Product" },
-      individualQuantity: { type: Number },
+      individualQuantity: { type: Number, default: 1 },
     },
   ],
 });

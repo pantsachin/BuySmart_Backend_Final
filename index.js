@@ -13,9 +13,11 @@ app.use(bodyParser.json());
 
 initializeDBConnection();
 
-const hehe = require("./routes/user.router.js");
+const wishlist = require("./routes/user.router.js");
+const cart = require("./routes/userCart.controller.js");
 
-app.use("/wishlist", hehe);
+app.use("/wishlist", wishlist);
+app.use("/cart", cart);
 
 // app.use("/user", newUserSignUp);
 // app.use("/cart", cartOperations);

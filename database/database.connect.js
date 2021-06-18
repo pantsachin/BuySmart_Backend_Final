@@ -11,6 +11,7 @@ async function initializeDBConnection() {
     });
     console.log("Connected to the database successfully");
   } catch (error) {
+    console.log("error", error);
     console.log("Error connecting to the database");
   }
 }
