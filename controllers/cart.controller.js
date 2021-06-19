@@ -90,4 +90,90 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-module.exports = { addToCart, removeFromCart };
+const increaseQuantity = async (req, res) => {
+  const { userName, productId } = req.body;
+  const productObjectId = mongoose.Types.ObjectId(productId);
+
+  try {
+    const user = await User.findOne({ userName: userName });
+    console.log("user", user);
+
+    user.cart.find(
+      (item) => String(item.product) === String(productObjectId)
+    ).individualQuantity =
+      user.cart.find((item) => String(item.product) === String(productObjectId))
+        .individualQuantity + 1;
+
+    console.log("user", user);
+
+    const saveUser = await user.save();
+    res.status(200).json({ success: true, saveUser });
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({
+      success: false,
+      message: "Couldn't increase the quantity of the item, please try again!",
+    });
+  }
+};
+
+const decreaseQuantity = async (req, res) => {
+  const { userName, productId } = req.body;
+  const mongoObjectId = mongoose.Types.ObjectId(productId);
+
+  try {
+    const user = await User.findOne({ userName: userName });
+    const nump = user.cart.find(
+      (item) => String(item.product) === String(mongoObjectId)
+    ).individualQuantity;
+
+    console.log("number", nump);
+
+    if (parseInt(nump) == 1) {
+      const saveUser = await User.findByIdAndUpdate(
+        user._id,
+        {
+          $pull: { cart: { product: mongoObjectId } },
+        },
+        { new: true }
+      )
+        .select("cart")
+        .populate("cart.product", "-__v");
+
+      res.status(200).json({
+        success: true,
+        saveUser,
+        message:
+          "Item quantity decreased successfully and if it was 1 then removed successfully",
+      });
+    } else {
+      user.cart.find(
+        (item) => String(item.product) === String(mongoObjectId)
+      ).individualQuantity =
+        user.cart.find((item) => String(item.product) === String(mongoObjectId))
+          .individualQuantity - 1;
+      const saveUser = await user.save();
+
+      res.status(200).json({
+        success: true,
+        saveUser,
+        message:
+          "Item quantity decreased successfully and if it was 1 then removed successfully",
+      });
+    }
+  } catch (error) {
+    console.log("error", error);
+    res.status(500).json({
+      success: false,
+      message:
+        "Couldn't decrease the quantity of the item, please try again later",
+    });
+  }
+};
+
+module.exports = {
+  addToCart,
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+};
