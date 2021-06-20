@@ -123,44 +123,20 @@ const decreaseQuantity = async (req, res) => {
 
   try {
     const user = await User.findOne({ userName: userName });
-    const nump = user.cart.find(
+
+    user.cart.find(
       (item) => String(item.product) === String(mongoObjectId)
-    ).individualQuantity;
+    ).individualQuantity =
+      user.cart.find((item) => String(item.product) === String(mongoObjectId))
+        .individualQuantity - 1;
+    const saveUser = await user.save();
 
-    console.log("number", nump);
-
-    if (parseInt(nump) == 1) {
-      const saveUser = await User.findByIdAndUpdate(
-        user._id,
-        {
-          $pull: { cart: { product: mongoObjectId } },
-        },
-        { new: true }
-      )
-        .select("cart")
-        .populate("cart.product", "-__v");
-
-      res.status(200).json({
-        success: true,
-        saveUser,
-        message:
-          "Item quantity decreased successfully and if it was 1 then removed successfully",
-      });
-    } else {
-      user.cart.find(
-        (item) => String(item.product) === String(mongoObjectId)
-      ).individualQuantity =
-        user.cart.find((item) => String(item.product) === String(mongoObjectId))
-          .individualQuantity - 1;
-      const saveUser = await user.save();
-
-      res.status(200).json({
-        success: true,
-        saveUser,
-        message:
-          "Item quantity decreased successfully and if it was 1 then removed successfully",
-      });
-    }
+    res.status(200).json({
+      success: true,
+      saveUser,
+      message:
+        "Item quantity decreased successfully and if it was 1 then removed successfully",
+    });
   } catch (error) {
     console.log("error", error);
     res.status(500).json({
