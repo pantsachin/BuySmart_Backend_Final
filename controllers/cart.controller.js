@@ -63,23 +63,23 @@ const removeFromCart = async (req, res) => {
     const user = await User.findOne({ userName, userName });
 
     // The save() function is generally the right way to update a document with Mongoose
-    user.cart.remove(productObjectId);
-    const saveUser = await user.save();
+    // user.cart.remove(productObjectId);
+    // const saveUser = await user.save();
 
-    // const updatedCart = await User.findByIdAndUpdate(
-    //   user._id,
-    //   {
-    //     $pull: { cart: { product: productObjectId } },
-    //   },
-    //   { new: true }
-    // )
-    //   .select("cart")
-    //   .populate("cart.product", "-__v");
+    const updatedCart = await User.findByIdAndUpdate(
+      user._id,
+      {
+        $pull: { cart: { product: productObjectId } },
+      },
+      { new: true }
+    )
+      .select("cart")
+      .populate("cart.product", "-__v");
 
     res.status(200).json({
       success: true,
       message: "Item removed from the cart successfully",
-      saveUser,
+      updatedCart,
     });
   } catch (error) {
     console.log("error", error);
@@ -123,20 +123,54 @@ const decreaseQuantity = async (req, res) => {
 
   try {
     const user = await User.findOne({ userName: userName });
-
-    user.cart.find(
+    const quantity = user.cart.find(
       (item) => String(item.product) === String(mongoObjectId)
-    ).individualQuantity =
-      user.cart.find((item) => String(item.product) === String(mongoObjectId))
-        .individualQuantity - 1;
-    const saveUser = await user.save();
+    ).individualQuantity;
 
-    res.status(200).json({
-      success: true,
-      saveUser,
-      message:
-        "Item quantity decreased successfully and if it was 1 then removed successfully",
-    });
+    console.log("quantity", quantity);
+    console.log(typeof quantity);
+
+    if (quantity === 1) {
+      //   user.cart.remove(mongoObjectId);
+      //   const saveUser = await user.save();
+
+      const updatedCart = await User.findByIdAndUpdate(
+        user._id,
+        {
+          $pull: { cart: { product: mongoObjectId } },
+        },
+        { new: true }
+      )
+        .select("cart")
+        .populate("cart.product", "-__v");
+
+      res.status(200).json({
+        success: true,
+        updatedCart,
+        message:
+          "Item quantity decreased successfully and if it was 1 then removed successfully",
+      });
+    } else {
+      user.cart.find(
+        (item) => String(item.product) === String(mongoObjectId)
+      ).individualQuantity =
+        user.cart.find((item) => String(item.product) === String(mongoObjectId))
+          .individualQuantity - 1;
+      const saveUser = await user.save();
+      res.status(200).json({
+        success: true,
+        saveUser,
+        message:
+          "Item quantity decreased successfully and if it was 1 then removed successfully",
+      });
+    }
+
+    // res.status(200).json({
+    //   success: true,
+    //   saveUser,
+    //   message:
+    //     "Item quantity decreased successfully and if it was 1 then removed successfully",
+    // });
   } catch (error) {
     console.log("error", error);
     res.status(500).json({
