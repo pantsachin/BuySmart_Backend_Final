@@ -71,8 +71,10 @@ const removeFromWishList = async (req, res) => {
       .select("wishList")
       .populate("wishList", "-__v");
 
+      
+
     // console.log({ productToBeRemoved });
-    // user.wishList.remove(mongoObjectId);
+    //  user.wishList.remove(mongoObjectId);
     // const saveUser = await user.save();
 
     res.status(200).json({
